@@ -1,0 +1,6 @@
+# Genel hariç tutulacaklar
+.DS_Store
+Thumbs.db
+
+# Node.js bağımlılıkları (Frontend projeleri için bazen gerekebilir)
+node_modules/
