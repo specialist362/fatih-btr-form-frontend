@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fatih Projesi BT Rehberliği Başvuru Formu - 2025-2026</title>
     <style>
-        /* CSS kodunuz burada başlar */
         * {
             margin: 0;
             padding: 0;
@@ -37,165 +36,428 @@
             right: 0;
             height: 5px;
             background: linear-gradient(90deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4, #feca57);
-            animation: shimmer 1s infinite linear;
+            animation: shimmer 3s ease-in-out infinite;
         }
 
         @keyframes shimmer {
-            0% { background-position: -200% 0; }
-            100% { background-position: 200% 0; }
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
         }
 
-        h1 {
+        .header {
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            color: white;
+            padding: 50px 40px;
             text-align: center;
-            color: #333;
-            padding: 30px 20px;
-            margin-bottom: 20px;
-            font-size: 2.2em;
-            background-color: #f8f9fa;
-            border-bottom: 1px solid #eee;
-            border-radius: 25px 25px 0 0;
+            position: relative;
+            overflow: hidden;
         }
 
-        form {
-            padding: 30px;
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+
+        .header h1 {
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+            position: relative;
+            z-index: 1;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.3rem;
+            opacity: 0.95;
+            position: relative;
+            z-index: 1;
+            font-weight: 300;
+        }
+
+        .year-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            padding: 8px 16px;
+            border-radius: 20px;
+            margin-top: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        .form-container {
+            padding: 50px;
+        }
+
+        .form-section {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 20px;
+            padding: 35px;
+            margin-bottom: 35px;
+            border-left: 6px solid #3498db;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .form-section::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #3498db, #2ecc71, #f39c12, #e74c3c);
+            z-index: -1;
+            border-radius: 20px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .form-section:hover::before {
+            opacity: 0.1;
+        }
+
+        .form-section:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+        }
+
+        .section-title {
+            font-size: 1.6rem;
+            color: #2c3e50;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            font-weight: 600;
+        }
+
+        .section-title::before {
+            content: '📋';
+            margin-right: 12px;
+            font-size: 1.4rem;
+            filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.1));
+        }
+
+        .form-row {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 25px;
+            margin-bottom: 25px;
         }
 
         .form-group {
             position: relative;
-            margin-bottom: 15px; /* Adjust spacing between groups */
         }
 
         .form-group label {
             display: block;
-            margin-bottom: 8px;
-            color: #555;
+            margin-bottom: 10px;
             font-weight: 600;
-            font-size: 0.95em;
+            color: #2c3e50;
+            font-size: 1rem;
+            transition: color 0.3s ease;
         }
 
-        .form-group input[type="text"],
-        .form-group input[type="email"],
-        .form-group input[type="tel"],
-        .form-group input[type="number"],
-        .form-group input[type="date"],
+        .form-group input,
         .form-group select,
         .form-group textarea {
             width: 100%;
-            padding: 12px 15px;
-            border: 1px solid #ccc;
-            border-radius: 10px;
-            font-size: 1em;
-            color: #333;
-            transition: border-color 0.3s ease, box-shadow 0.3s ease;
-            background-color: #fcfcfc;
+            padding: 18px;
+            border: 2px solid #e0e6ed;
+            border-radius: 12px;
+            font-size: 1.05rem;
+            transition: all 0.3s ease;
+            background: rgba(255,255,255,0.9);
+            backdrop-filter: blur(10px);
         }
 
-        .form-group input[type="text"]:focus,
-        .form-group input[type="email"]:focus,
-        .form-group input[type="tel"]:focus,
-        .form-group input[type="number"]:focus,
-        .form-group input[type="date"]:focus,
+        .form-group input:focus,
         .form-group select:focus,
         .form-group textarea:focus {
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
             outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 4px rgba(52, 152, 219, 0.15);
+            transform: translateY(-2px);
+            background: white;
         }
 
-        .form-group textarea {
-            resize: vertical;
-            min-height: 80px;
+        .form-group input:focus + label,
+        .form-group select:focus + label,
+        .form-group textarea:focus + label {
+            color: #3498db;
         }
 
-        .radio-group label {
-            display: inline-block;
-            margin-right: 20px;
-            font-weight: normal;
+        .radio-group {
+            display: flex;
+            gap: 25px;
+            margin-top: 15px;
+            flex-wrap: wrap;
         }
 
-        .radio-group input[type="radio"] {
-            margin-right: 8px;
+        .radio-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 15px 20px;
+            background: rgba(255,255,255,0.8);
+            border-radius: 12px;
+            border: 2px solid #e0e6ed;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
         }
 
-        .full-width {
-            grid-column: 1 / -1;
+        .radio-item:hover {
+            border-color: #3498db;
+            background: rgba(52, 152, 219, 0.1);
+            transform: translateY(-2px);
         }
 
-        button {
-            display: block;
-            width: 50%;
-            padding: 15px;
-            margin: 30px auto 0;
-            background: linear-gradient(45deg, #667eea, #764ba2);
+        .radio-item input[type="radio"]:checked + label,
+        .radio-item:has(input[type="radio"]:checked) {
+            border-color: #3498db;
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.2);
+        }
+
+        .preferences-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+
+        .preferences-table th,
+        .preferences-table td {
+            padding: 20px;
+            text-align: left;
+            border-bottom: 1px solid rgba(224, 230, 237, 0.5);
+        }
+
+        .preferences-table th {
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            color: white;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .preferences-table tr:nth-child(even) {
+            background: rgba(52, 152, 219, 0.03);
+        }
+
+        .preferences-table tr:hover {
+            background: rgba(52, 152, 219, 0.08);
+        }
+
+        .preferences-table input {
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            padding: 12px;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+
+        .preferences-table input:focus {
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+        }
+
+        .commitment-section {
+            background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
+            color: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin: 40px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .commitment-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%);
+            animation: rotate 25s linear infinite;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .commitment-text {
+            position: relative;
+            z-index: 1;
+            line-height: 1.8;
+            font-size: 1.15rem;
+        }
+
+        .commitment-text strong {
+            font-weight: 700;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+        }
+
+        .signature-section {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 20px;
+            padding: 35px;
+            margin-top: 35px;
+        }
+
+        .signature-box {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            border: 2px solid rgba(52, 152, 219, 0.2);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+        }
+
+        .signature-box:hover {
+            border-color: #3498db;
+            transform: translateY(-2px);
+        }
+
+        .signature-box h3 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #00b894 0%, #00a085 100%);
             color: white;
             border: none;
-            border-radius: 10px;
-            font-size: 1.2em;
+            padding: 20px 50px;
+            font-size: 1.3rem;
             font-weight: 700;
+            border-radius: 50px;
             cursor: pointer;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-            box-shadow: 0 8px 15px rgba(0,0,0,0.2);
+            transition: all 0.4s ease;
+            display: block;
+            margin: 50px auto 0;
+            box-shadow: 0 15px 40px rgba(0, 184, 148, 0.4);
+            position: relative;
+            overflow: hidden;
         }
 
-        button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 12px 20px rgba(0,0,0,0.3);
+        .submit-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s ease;
         }
 
-        button:active {
-            transform: translateY(0);
-            box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+        .submit-btn:hover::before {
+            left: 100%;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 50px rgba(0, 184, 148, 0.5);
+        }
+
+        .submit-btn:active {
+            transform: translateY(-2px);
+        }
+
+        .notes {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+            border: 2px solid #ffc107;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 35px;
+            position: relative;
+        }
+
+        .notes::before {
+            content: '⚠️';
+            position: absolute;
+            top: -15px;
+            left: 30px;
+            background: #ffc107;
+            padding: 10px;
+            border-radius: 50%;
+            font-size: 1.5rem;
+        }
+
+        .notes h3 {
+            color: #856404;
+            margin: 20px 0 20px 0;
+            display: flex;
+            align-items: center;
+            font-size: 1.4rem;
+        }
+
+        .notes ul {
+            color: #856404;
+            padding-left: 25px;
+        }
+
+        .notes li {
+            margin-bottom: 12px;
+            line-height: 1.6;
+            font-size: 1.05rem;
         }
 
         .success-message {
-            display: none; /* Varsayılan olarak gizli */
-            text-align: center;
-            padding: 40px;
-            background-color: #e6ffe6;
-            color: #28a745;
-            border: 1px solid #28a745;
+            background: linear-gradient(135deg, #00b894 0%, #00a085 100%);
+            color: white;
+            padding: 30px;
             border-radius: 15px;
-            margin: 30px auto;
-            max-width: 80%;
-            font-size: 1.3em;
-            font-weight: bold;
-            box-shadow: 0 10px 20px rgba(40, 167, 69, 0.2);
+            text-align: center;
+            margin-top: 30px;
+            display: none;
+            box-shadow: 0 15px 40px rgba(0, 184, 148, 0.3);
         }
 
-        .success-message p {
-            margin-bottom: 15px;
+        .success-message h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
         }
 
-        .success-message span {
-            display: block;
-            margin-top: 10px;
-            font-size: 1.5em;
-            color: #1e7e34;
-        }
-
-        /* Loading Overlay CSS */
         .loading-overlay {
-            display: none; /* Varsayılan olarak gizli */
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(255, 255, 255, 0.8);
-            justify-content: center; /* Flexbox ile ortalama */
-            align-items: center; /* Flexbox ile ortalama */
-            z-index: 1000;
+            background: rgba(0,0,0,0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
         }
 
-        .spinner {
-            border: 8px solid #f3f3f3;
-            border-top: 8px solid #667eea;
-            border-radius: 50%;
+        .loading-spinner {
             width: 60px;
             height: 60px;
+            border: 4px solid rgba(255,255,255,0.3);
+            border-top: 4px solid white;
+            border-radius: 50%;
             animation: spin 1s linear infinite;
         }
 
@@ -204,114 +466,235 @@
             100% { transform: rotate(360deg); }
         }
 
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                border-radius: 20px;
+            }
+            
+            .header {
+                padding: 40px 30px;
+            }
+            
+            .header h1 {
+                font-size: 2.2rem;
+            }
+            
+            .form-container {
+                padding: 30px 25px;
+            }
+            
+            .form-section {
+                padding: 25px;
+            }
+            
+            .radio-group {
+                flex-direction: column;
+            }
+            
+            .preferences-table {
+                font-size: 0.9rem;
+            }
+            
+            .preferences-table th,
+            .preferences-table td {
+                padding: 15px 10px;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="loading-overlay" id="loadingOverlay">
-        <div class="spinner"></div>
+        <div class="loading-spinner"></div>
     </div>
 
     <div class="container">
-        <h1>Fatih Projesi BT Rehberliği Başvuru Formu <br> 2025-2026 Eğitim Öğretim Yılı</h1>
-        <form id="btrForm">
-            <div class="form-group">
-                <label for="tcNo">T.C. Kimlik Numarası:</label>
-                <input type="text" id="tcNo" name="tcNo" placeholder="T.C. Kimlik Numarası" required pattern="[0-9]{11}" title="Lütfen 11 haneli T.C. Kimlik Numaranızı giriniz.">
-            </div>
-            <div class="form-group">
-                <label for="fullName">Adınız Soyadınız:</label>
-                <input type="text" id="fullName" name="fullName" placeholder="Adınız Soyadınız" required>
-            </div>
-            <div class="form-group">
-                <label for="branch">Branşınız:</label>
-                <input type="text" id="branch" name="branch" placeholder="Branşınız" required>
-            </div>
-            <div class="form-group">
-                <label for="email">E-posta Adresiniz:</label>
-                <input type="email" id="email" name="email" placeholder="örnek@mail.com" required>
-            </div>
-            <div class="form-group">
-                <label for="phone">Telefon Numaranız:</label>
-                <input type="tel" id="phone" name="phone" placeholder="5xx xxx xx xx" required pattern="[0-9]{10}" title="Lütfen 10 haneli telefon numaranızı giriniz (başına 0 koymadan).">
-            </div>
+        <div class="header">
+            <h1>Fatih Projesi BT Rehberliği</h1>
+            <p>Başvuru Formu</p>
+            <div class="year-badge">2025-2026 Eğitim Öğretim Yılı I. Dönem</div>
+        </div>
 
-            <div class="form-group">
-                <label for="weeklyHours">Haftalık BT Rehberliği Saati (Onaylıysa):</label>
-                <input type="number" id="weeklyHours" name="weeklyHours" placeholder="0-40 arası" min="0" max="40">
-            </div>
-            <div class="form-group">
-                <label for="certificateDate">BTR Sertifika Tarihiniz:</label>
-                <input type="date" id="certificateDate" name="certificateDate" required>
-            </div>
-
-            <div class="form-group">
-                <label>Norm Durumunuz:</label>
-                <div class="radio-group">
-                    <label><input type="radio" name="normStatus" value="Norm Fazlası" required> Norm Fazlası</label>
-                    <label><input type="radio" name="normStatus" value="Norm İçi" required> Norm İçi</label>
+        <div class="form-container">
+            <form id="btrForm">
+                <div class="form-section">
+                    <h2 class="section-title">Kişisel Bilgiler</h2>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="tcNo">T.C. Kimlik No *</label>
+                            <input type="text" id="tcNo" name="tcNo" required maxlength="11" pattern="[0-9]{11}" placeholder="11 haneli TC Kimlik numaranız">
+                        </div>
+                        <div class="form-group">
+                            <label for="fullName">Adı Soyadı *</label>
+                            <input type="text" id="fullName" name="fullName" required placeholder="Ad ve soyadınızı giriniz">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="branch">Branşı *</label>
+                            <input type="text" id="branch" name="branch" required placeholder="Öğretmenlik branşınız">
+                        </div>
+                        <div class="form-group">
+                            <label for="email">E-Posta Adresi *</label>
+                            <input type="email" id="email" name="email" required placeholder="ornek@email.com">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="phone">İletişim Telefonu *</label>
+                            <input type="tel" id="phone" name="phone" required placeholder="0532 123 45 67">
+                        </div>
+                        <div class="form-group">
+                            <label for="weeklyHours">Haftalık Ders Saati Sayısı *</label>
+                            <input type="number" id="weeklyHours" name="weeklyHours" required min="0" max="40" placeholder="Haftalık ders saati">
+                        </div>
+                    </div>
                 </div>
-            </div>
 
-            <div class="form-group">
-                <label for="ilTercihi">Görev Yapmak İstediğiniz İl Tercihi:</label>
-                <input type="text" id="ilTercihi" name="ilTercihi" placeholder="İl Adı" required>
-            </div>
-            <div class="form-group">
-                <label for="ilceTercihi">Görev Yapmak İstediğiniz İlçe Tercihi:</label>
-                <input type="text" id="ilceTercihi" name="ilceTercihi" placeholder="İlçe Adı" required>
-            </div>
-            <div class="form-group">
-                <label for="schoolPreference">Görev Yapmak İstediğiniz Okul Tercihi:</label>
-                <input type="text" id="schoolPreference" name="schoolPreference" placeholder="Okul Adı (isteğe bağlı)">
-            </div>
+                <div class="form-section">
+                    <h2 class="section-title">Belge ve Norm Durumu</h2>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="certificateDate">Belge Tarihi ve Kurs No'su</label>
+                            <input type="text" id="certificateDate" name="certificateDate" placeholder="BT öğretmenleri boş bırakacaktır">
+                        </div>
+                        <div class="form-group">
+                            <label>Norm Durumu *</label>
+                            <div class="radio-group">
+                                <div class="radio-item">
+                                    <input type="radio" id="normFazlasi" name="normStatus" value="norm_fazlasi_degilim" required>
+                                    <label for="normFazlasi">Norm Fazlası Değilim</label>
+                                </div>
+                                <div class="radio-item">
+                                    <input type="radio" id="normFazlasiyim" name="normStatus" value="norm_fazlasiyim" required>
+                                    <label for="normFazlasiyim">Norm Fazlasıyım</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-            <div class="form-group full-width">
-                <label for="specialRequest">Özel İstekler / Notlar:</label>
-                <textarea id="specialRequest" name="specialRequest" rows="4" placeholder="Eklemek istediğiniz özel istekler veya notlar"></textarea>
-            </div>
-            <div class="form-group">
-                <label for="teacherDate">Başvuru Tarihi:</label>
-                <input type="date" id="teacherDate" name="teacherDate" required>
-            </div>
+                <div class="form-section">
+                    <h2 class="section-title">Tercihler</h2>
+                    <table class="preferences-table">
+                        <thead>
+                            <tr>
+                                <th>Tercih Sırası</th>
+                                <th>Kurum Kodu</th>
+                                <th>İlçesi</th>
+                                <th>Kurum Adı</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Kadrosunun Bulunduğu Okul/Kurum</strong><br><small>(1. Tercih olarak değerlendirilir)</small></td>
+                                <td><input type="text" name="currentSchoolCode" required placeholder="Kurum kodu"></td>
+                                <td><input type="text" name="currentSchoolDistrict" required placeholder="İlçe adı"></td>
+                                <td><input type="text" name="currentSchoolName" required placeholder="Okul/Kurum adı"></td>
+                            </tr>
+                            <tr>
+                                <td><strong>2. Tercihiniz</strong></td>
+                                <td><input type="text" name="preference2Code" placeholder="Kurum kodu"></td>
+                                <td><input type="text" name="preference2District" placeholder="İlçe adı"></td>
+                                <td><input type="text" name="preference2Name" placeholder="Okul/Kurum adı"></td>
+                            </tr>
+                            <tr>
+                                <td><strong>3. Tercihiniz</strong></td>
+                                <td><input type="text" name="preference3Code" placeholder="Kurum kodu"></td>
+                                <td><input type="text" name="preference3District" placeholder="İlçe adı"></td>
+                                <td><input type="text" name="preference3Name" placeholder="Okul/Kurum adı"></td>
+                            </tr>
+                            <tr>
+                                <td><strong>4. Tercihiniz</strong></td>
+                                <td><input type="text" name="preference4Code" placeholder="Kurum kodu"></td>
+                                <td><input type="text" name="preference4District" placeholder="İlçe adı"></td>
+                                <td><input type="text" name="preference4Name" placeholder="Okul/Kurum adı"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
 
-            <button type="submit">Başvuruyu Tamamla</button>
-        </form>
+                <div class="form-section">
+                    <h2 class="section-title">Talep / Açıklama</h2>
+                    <div class="form-group">
+                        <label for="specialRequest">İletmeniz gereken özel durumunuzu kısaca bu alanda belirtiniz</label>
+                        <textarea id="specialRequest" name="specialRequest" rows="5" placeholder="Özel durumunuz varsa buraya detaylı şekilde yazınız..."></textarea>
+                    </div>
+                </div>
 
-        <div id="successMessage" class="success-message">
-            <p>Başvurunuz başarıyla alındı!</p>
-            <p>Başvuru ID'niz:</p>
-            <span id="applicationId"></span>
-            <p>Başvurunuz en kısa sürede değerlendirilecektir.</p>
+                <div class="commitment-section">
+                    <div class="commitment-text">
+                        <p><strong>TAAHHÜT:</strong></p>
+                        <br>
+                        <p>Bakanlığımızın Fatih Projesi ve bilişim teknolojileri ile ilgili projelerinin yürütülmesi ile ilgili olarak BT Rehberliği görevimin gereği olan işleri hizmetin sürekliliği esasıyla yürüteceğime, kazanmış olduğum bilgi birikimini ve deneyimimi görev yaptığım okulda eğitim ve öğretimin kalitesinin artırılması konusunda kullanacağımı kabul ve taahhüt ederek, <strong>Fatih Projesi Bilişim Teknolojileri Rehberliği</strong> görevini kabul ediyorum.</p>
+                    </div>
+                </div>
+
+                <div class="signature-section">
+                    <h2 class="section-title">Onay ve İmza</h2>
+                    <div class="signature-box">
+                        <h3>Başvuran Öğretmen</h3>
+                        <div class="form-group">
+                            <label for="teacherDate">Bugünün Tarihi</label>
+                            <input type="date" id="teacherDate" name="teacherDate" required>
+                        </div>
+                        <p style="margin-top: 20px; color: #7f8c8d;">
+                            <strong>Dijital İmza</strong><br>
+                            <small>Bu formu göndererek yukarıdaki taahhüdü kabul etmiş sayılırsınız.</small>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="notes">
+                    <h3>Önemli Bilgilendirme</h3>
+                    <ul>
+                        <li><strong>*</strong> Görevlendirmenin yapılabilmesi için formdaki bilgilerin eksiksiz doldurulması gerekmektedir.</li>
+                        <li><strong>**</strong> Bilişim teknolojileri öğretmenleri "Belge Tarihi ve Kurs No'su" bölümünü boş bırakacaktır.</li>
+                        <li><strong>***</strong> "Haftalık Ders Saati Sayısı" bölümünün boş bırakılması halinde başka bir okula görevlendirme yapılmayacaktır.</li>
+                        <li><strong>****</strong> Kadrosunun Bulunduğu İlçe / Okul 1. Tercih olarak değerlendirilecektir.</li>
+                        <li><strong>*****</strong> İletmeniz gereken özel durumunuzu kısaca "Talep/Açıklama" alanında belirtiniz.</li>
+                    </ul>
+                </div>
+
+                <button type="submit" class="submit-btn">
+                    <span>Başvuruyu Gönder</span>
+                </button>
+                
+                <div id="successMessage" class="success-message">
+                    <h3>✅ Başvurunuz Başarıyla Gönderildi!</h3>
+                    <p>BTR başvuru formunuz sisteme kaydedilmiştir. Başvuru numaranız: <strong id="applicationId"></strong></p>
+                    <p>En kısa sürede değerlendirmeye alınacaktır.</p>
+                </div>
+            </form>
         </div>
     </div>
 
     <script>
-        // loadingOverlay öğesini JavaScript'te yakala
         const loadingOverlay = document.getElementById('loadingOverlay');
+        const btrForm = document.getElementById('btrForm');
+        const successMessageDiv = document.getElementById('successMessage');
+        const applicationIdSpan = document.getElementById('applicationId');
+        const teacherDateInput = document.getElementById('teacherDate');
 
-        // Sayfa yüklendiğinde ve form gönderildiğinde tarih alanını otomatik doldur
-        document.addEventListener('DOMContentLoaded', (event) => {
+        // Sayfa yüklendiğinde tarih alanını otomatik doldur
+        document.addEventListener('DOMContentLoaded', () => {
             const today = new Date().toISOString().split('T')[0];
-            const teacherDateInput = document.getElementById('teacherDate');
-            if (teacherDateInput) { // Elementin var olduğundan emin ol
+            if (teacherDateInput) {
                 teacherDateInput.value = today;
             }
         });
 
-        // Form öğesini yakala
-        const form = document.getElementById('btrForm');
-
-        // Form varsa event listener ekle
-        if (form) {
-            form.addEventListener('submit', function(event) {
-                event.preventDefault(); // Formun varsayılan gönderimini engelle
+        // Form gönderme işlemi
+        if (btrForm) {
+            btrForm.addEventListener('submit', function(e) {
+                e.preventDefault(); // Formun varsayılan gönderimini engelle
 
                 // Loading animasyonunu göster
-                loadingOverlay.style.display = 'flex';
+                if (loadingOverlay) {
+                    loadingOverlay.style.display = 'flex';
+                }
 
                 // Form verilerini al
-                // Her bir ID'nin HTML'de doğru ve var olduğundan emin olun!
-                // ?. (optional chaining) kullanarak null/undefined hatalarını yakala
                 const formData = {
                     tcNo: document.getElementById('tcNo')?.value || '',
                     fullName: document.getElementById('fullName')?.value || '',
@@ -320,68 +703,72 @@
                     phone: document.getElementById('phone')?.value || '',
                     weeklyHours: parseInt(document.getElementById('weeklyHours')?.value || '0'),
                     certificateDate: document.getElementById('certificateDate')?.value || '',
-                    // normStatus için seçili radyo butonunun değerini al
                     normStatus: document.querySelector('input[name="normStatus"]:checked')?.value || '',
                     preferences: {
-                        ilTercihi: document.getElementById('ilTercihi')?.value || '',
-                        ilceTercihi: document.getElementById('ilceTercihi')?.value || '',
-                        okulTercihi: document.getElementById('schoolPreference')?.value || ''
+                        currentSchool: {
+                            code: document.querySelector('input[name="currentSchoolCode"]')?.value || '',
+                            district: document.querySelector('input[name="currentSchoolDistrict"]')?.value || '',
+                            name: document.querySelector('input[name="currentSchoolName"]')?.value || ''
+                        },
+                        preference2: {
+                            code: document.querySelector('input[name="preference2Code"]')?.value || null,
+                            district: document.querySelector('input[name="preference2District"]')?.value || null,
+                            name: document.querySelector('input[name="preference2Name"]')?.value || null
+                        },
+                        preference3: {
+                            code: document.querySelector('input[name="preference3Code"]')?.value || null,
+                            district: document.querySelector('input[name="preference3District"]')?.value || null,
+                            name: document.querySelector('input[name="preference3Name"]')?.value || null
+                        },
+                        preference4: {
+                            code: document.querySelector('input[name="preference4Code"]')?.value || null,
+                            district: document.querySelector('input[name="preference4District"]')?.value || null,
+                            name: document.querySelector('input[name="preference4Name"]')?.value || null
+                        }
                     },
                     specialRequest: document.getElementById('specialRequest')?.value || '',
                     teacherDate: document.getElementById('teacherDate')?.value || ''
                 };
 
-                // Gerçek backend API'nıza veri gönderme (fetch)
+                // API'ye veri gönderme
                 fetch('https://fatih-btr-form-backend.onrender.com', { // <-- BURAYI KENDİ RENDER API URL'NİZLE DEĞİŞTİRİN
-                    method: 'POST', // HTTP metodu POST olmalı
+                    method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json', // Gönderdiğimiz verinin JSON formatında olduğunu belirtir
-                        // 'Authorization': 'Bearer ' + localStorage.getItem('token') // Backend'de kimlik doğrulama yoksa bu satırı yorum satırı yapın veya silin.
+                        'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify(formData) // formData objesini JSON string'e dönüştürerek gönderir
+                    body: JSON.stringify(formData)
                 })
                 .then(response => {
-                    // Yükleniyor animasyonunu gizle, çünkü sunucudan yanıt geldi (başarılı veya hatalı)
-                    loadingOverlay.style.display = 'none';
-
-                    // HTTP yanıtının başarılı olup olmadığını kontrol et (200 OK, 201 Created vb.)
+                    if (loadingOverlay) {
+                        loadingOverlay.style.display = 'none'; // Yükleniyor animasyonunu gizle
+                    }
                     if (!response.ok) {
-                        // Eğer yanıt başarılı değilse (örn: 4xx, 5xx), sunucudan gelen hatayı okumaya çalış
                         return response.json().then(errData => {
-                            // Backend'den gelen hata mesajını fırlat (örn: "Bu T.C. Kimlik No ile başvuru yapılmış.")
-                            throw new Error(errData.message || 'Başvuru gönderilirken bilinmeyen bir hata oluştu.');
+                            throw new Error(errData.message || 'Başvuru gönderilirken bir hata oluştu.');
                         });
                     }
-                    // Başarılı yanıtı JSON olarak ayrıştır (backend'den gelen `success: true` objesi gibi)
                     return response.json();
                 })
                 .then(data => {
-                    // Sunucudan gelen başarılı JSON yanıtını konsola yazdır
                     console.log('Sunucudan gelen yanıt:', data);
-                    // Eğer backend yanıtı `success: true` içeriyorsa:
-                    if (data.success) {
-                        const applicationIdSpan = document.getElementById('applicationId');
-                        const successMessageDiv = document.getElementById('successMessage');
-                        const btrForm = document.getElementById('btrForm');
-                        const teacherDateInput = document.getElementById('teacherDate');
-
+                    if (data.success) { // Backend'den success: true bekleniyor
                         if (applicationIdSpan) applicationIdSpan.textContent = data.applicationId; // Backend'den gelen başvuru ID'sini göster
                         if (successMessageDiv) successMessageDiv.style.display = 'block'; // Başarı mesajını görünür yap
                         if (successMessageDiv) successMessageDiv.scrollIntoView({ behavior: 'smooth' }); // Sayfayı başarı mesajına kaydır
-                        if (btrForm) btrForm.reset(); // Formu temizle
                         
+                        if (btrForm) btrForm.reset(); // Formu temizle
                         const today = new Date().toISOString().split('T')[0]; // Bugünün tarihini al
                         if (teacherDateInput) teacherDateInput.value = today; // Tarih alanını güncelle
                     } else {
-                        // Eğer backend yanıtı `success: false` ise (genellikle hata mesajıyla birlikte)
-                        alert('Başvuru başarısız: ' + data.message); // Kullanıcıya backend'den gelen hata mesajını göster
+                        alert('Başvuru başarısız: ' + (data.message || 'Bilinmeyen bir hata oluştu.'));
                     }
                 })
                 .catch(error => {
-                    // Ağ hatası (sunucuya ulaşılamaması) veya `.then` bloğunda fırlatılan hata durumunda
-                    if (loadingOverlay) loadingOverlay.style.display = 'none'; // Loading animasyonunu gizle
-                    console.error('İstek sırasında bir hata oluştu:', error); // Hatayı konsola yazdır
-                    alert('İstek sırasında bir hata oluştu: ' + error.message + ' Lütfen tekrar deneyin.'); // Kullanıcıya genel bir hata mesajı göster
+                    if (loadingOverlay) {
+                        loadingOverlay.style.display = 'none'; // Hata durumunda da loading animasyonunu gizle
+                    }
+                    console.error('İstek sırasında bir hata oluştu:', error);
+                    alert('İstek sırasında bir hata oluştu: ' + error.message + ' Lütfen tekrar deneyin.');
                 });
             });
         }
