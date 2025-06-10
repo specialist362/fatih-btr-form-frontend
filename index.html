@@ -1,11 +1,11 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fatih Projesi BT Rehberliği Başvuru Formu - 2025-2026</title>
     <style>
-        /* CSS kodunuz buraya gelecek. Önceki kopyaladığınız CSS'i buraya yapıştırın */
+        /* CSS kodunuz burada başlar */
         * {
             margin: 0;
             padding: 0;
@@ -185,9 +185,8 @@
             width: 100%;
             height: 100%;
             background: rgba(255, 255, 255, 0.8);
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            justify-content: center; /* Flexbox ile ortalama */
+            align-items: center; /* Flexbox ile ortalama */
             z-index: 1000;
         }
 
@@ -293,92 +292,99 @@
         // Sayfa yüklendiğinde ve form gönderildiğinde tarih alanını otomatik doldur
         document.addEventListener('DOMContentLoaded', (event) => {
             const today = new Date().toISOString().split('T')[0];
-            document.getElementById('teacherDate').value = today;
+            const teacherDateInput = document.getElementById('teacherDate');
+            if (teacherDateInput) { // Elementin var olduğundan emin ol
+                teacherDateInput.value = today;
+            }
         });
 
         // Form öğesini yakala
         const form = document.getElementById('btrForm');
 
-        form.addEventListener('submit', function(event) {
-            event.preventDefault(); // Formun varsayılan gönderimini engelle
+        // Form varsa event listener ekle
+        if (form) {
+            form.addEventListener('submit', function(event) {
+                event.preventDefault(); // Formun varsayılan gönderimini engelle
 
-            // Loading animasyonunu göster
-            loadingOverlay.style.display = 'flex';
+                // Loading animasyonunu göster
+                loadingOverlay.style.display = 'flex';
 
-            // Form verilerini al
-            const formData = {
+                // Form verilerini al
                 // Her bir ID'nin HTML'de doğru ve var olduğundan emin olun!
-                tcNo: document.getElementById('tcNo').value,
-                fullName: document.getElementById('fullName').value,
-                branch: document.getElementById('branch').value,
-                email: document.getElementById('email').value,
-                phone: document.getElementById('phone').value,
-                weeklyHours: parseInt(document.getElementById('weeklyHours').value),
-                certificateDate: document.getElementById('certificateDate').value,
-                // normStatus için seçili radyo butonunun değerini al
-                normStatus: document.querySelector('input[name="normStatus"]:checked')?.value || '', // "?." null kontrolü ekler
-                preferences: {
-                    ilTercihi: document.getElementById('ilTercihi').value,
-                    ilceTercihi: document.getElementById('ilceTercihi').value,
-                    okulTercihi: document.getElementById('schoolPreference').value // schoolPreference isteğe bağlı olduğu için boş olabilir.
-                },
-                specialRequest: document.getElementById('specialRequest').value,
-                teacherDate: document.getElementById('teacherDate').value
-            };
+                // ?. (optional chaining) kullanarak null/undefined hatalarını yakala
+                const formData = {
+                    tcNo: document.getElementById('tcNo')?.value || '',
+                    fullName: document.getElementById('fullName')?.value || '',
+                    branch: document.getElementById('branch')?.value || '',
+                    email: document.getElementById('email')?.value || '',
+                    phone: document.getElementById('phone')?.value || '',
+                    weeklyHours: parseInt(document.getElementById('weeklyHours')?.value || '0'),
+                    certificateDate: document.getElementById('certificateDate')?.value || '',
+                    // normStatus için seçili radyo butonunun değerini al
+                    normStatus: document.querySelector('input[name="normStatus"]:checked')?.value || '',
+                    preferences: {
+                        ilTercihi: document.getElementById('ilTercihi')?.value || '',
+                        ilceTercihi: document.getElementById('ilceTercihi')?.value || '',
+                        okulTercihi: document.getElementById('schoolPreference')?.value || ''
+                    },
+                    specialRequest: document.getElementById('specialRequest')?.value || '',
+                    teacherDate: document.getElementById('teacherDate')?.value || ''
+                };
 
-            // ****** Önceki setTimeout bloğu BURADAN TAMAMEN KALDIRILMIŞTIR ******
-            // ****** Artık doğrudan backend'e veri gönderiyoruz ******
+                // Gerçek backend API'nıza veri gönderme (fetch)
+                fetch('https://fatih-btr-form-backend.onrender.com', { // <-- BURAYI KENDİ RENDER API URL'NİZLE DEĞİŞTİRİN
+                    method: 'POST', // HTTP metodu POST olmalı
+                    headers: {
+                        'Content-Type': 'application/json', // Gönderdiğimiz verinin JSON formatında olduğunu belirtir
+                        // 'Authorization': 'Bearer ' + localStorage.getItem('token') // Backend'de kimlik doğrulama yoksa bu satırı yorum satırı yapın veya silin.
+                    },
+                    body: JSON.stringify(formData) // formData objesini JSON string'e dönüştürerek gönderir
+                })
+                .then(response => {
+                    // Yükleniyor animasyonunu gizle, çünkü sunucudan yanıt geldi (başarılı veya hatalı)
+                    loadingOverlay.style.display = 'none';
 
-            // Gerçek backend API'nıza veri gönderme (fetch)
-            fetch('https://fatih-btr-form-backend.onrender.com', { // <-- BURAYI KENDİ RENDER API URL'NİZLE DEĞİŞTİRİN
-                method: 'POST', // HTTP metodu POST olmalı
-                headers: {
-                    'Content-Type': 'application/json', // Gönderdiğimiz verinin JSON formatında olduğunu belirtir
-                    // 'Authorization': 'Bearer ' + localStorage.getItem('token') // Backend'de kimlik doğrulama yoksa bu satırı yorum satırı yapın veya silin.
-                },
-                body: JSON.stringify(formData) // formData objesini JSON string'e dönüştürerek gönderir
-            })
-            .then(response => {
-                // Yükleniyor animasyonunu gizle, çünkü sunucudan yanıt geldi (başarılı veya hatalı)
-                loadingOverlay.style.display = 'none';
+                    // HTTP yanıtının başarılı olup olmadığını kontrol et (200 OK, 201 Created vb.)
+                    if (!response.ok) {
+                        // Eğer yanıt başarılı değilse (örn: 4xx, 5xx), sunucudan gelen hatayı okumaya çalış
+                        return response.json().then(errData => {
+                            // Backend'den gelen hata mesajını fırlat (örn: "Bu T.C. Kimlik No ile başvuru yapılmış.")
+                            throw new Error(errData.message || 'Başvuru gönderilirken bilinmeyen bir hata oluştu.');
+                        });
+                    }
+                    // Başarılı yanıtı JSON olarak ayrıştır (backend'den gelen `success: true` objesi gibi)
+                    return response.json();
+                })
+                .then(data => {
+                    // Sunucudan gelen başarılı JSON yanıtını konsola yazdır
+                    console.log('Sunucudan gelen yanıt:', data);
+                    // Eğer backend yanıtı `success: true` içeriyorsa:
+                    if (data.success) {
+                        const applicationIdSpan = document.getElementById('applicationId');
+                        const successMessageDiv = document.getElementById('successMessage');
+                        const btrForm = document.getElementById('btrForm');
+                        const teacherDateInput = document.getElementById('teacherDate');
 
-                // HTTP yanıtının başarılı olup olmadığını kontrol et (200 OK, 201 Created vb.)
-                if (!response.ok) {
-                    // Eğer yanıt başarılı değilse (örn: 4xx, 5xx), sunucudan gelen hatayı okumaya çalış
-                    return response.json().then(errData => {
-                        // Backend'den gelen hata mesajını fırlat (örn: "Bu T.C. Kimlik No ile başvuru yapılmış.")
-                        throw new Error(errData.message || 'Başvuru gönderilirken bilinmeyen bir hata oluştu.');
-                    });
-                }
-                // Başarılı yanıtı JSON olarak ayrıştır (backend'den gelen `success: true` objesi gibi)
-                return response.json();
-            })
-            .then(data => {
-                // Sunucudan gelen başarılı JSON yanıtını konsola yazdır
-                console.log('Sunucudan gelen yanıt:', data);
-                // Eğer backend yanıtı `success: true` içeriyorsa:
-                if (data.success) {
-                    document.getElementById('applicationId').textContent = data.applicationId; // Backend'den gelen başvuru ID'sini göster
-                    document.getElementById('successMessage').style.display = 'block'; // Başarı mesajını görünür yap
-                    document.getElementById('successMessage').scrollIntoView({ behavior: 'smooth' }); // Sayfayı başarı mesajına kaydır
-                    document.getElementById('btrForm').reset(); // Formu temizle
-                    const today = new Date().toISOString().split('T')[0]; // Bugünün tarihini al
-                    document.getElementById('teacherDate').value = today; // Tarih alanını güncelle
-                } else {
-                    // Eğer backend yanıtı `success: false` ise (genellikle hata mesajıyla birlikte)
-                    alert('Başvuru başarısız: ' + data.message); // Kullanıcıya backend'den gelen hata mesajını göster
-                }
-            })
-            .catch(error => {
-                // Ağ hatası (sunucuya ulaşılamaması) veya `.then` bloğunda fırlatılan hata durumunda
-                loadingOverlay.style.display = 'none'; // Loading animasyonunu gizle
-                console.error('İstek sırasında bir hata oluştu:', error); // Hatayı konsola yazdır
-                alert('İstek sırasında bir hata oluştu: ' + error.message + ' Lütfen tekrar deneyin.'); // Kullanıcıya genel bir hata mesajı göster
+                        if (applicationIdSpan) applicationIdSpan.textContent = data.applicationId; // Backend'den gelen başvuru ID'sini göster
+                        if (successMessageDiv) successMessageDiv.style.display = 'block'; // Başarı mesajını görünür yap
+                        if (successMessageDiv) successMessageDiv.scrollIntoView({ behavior: 'smooth' }); // Sayfayı başarı mesajına kaydır
+                        if (btrForm) btrForm.reset(); // Formu temizle
+                        
+                        const today = new Date().toISOString().split('T')[0]; // Bugünün tarihini al
+                        if (teacherDateInput) teacherDateInput.value = today; // Tarih alanını güncelle
+                    } else {
+                        // Eğer backend yanıtı `success: false` ise (genellikle hata mesajıyla birlikte)
+                        alert('Başvuru başarısız: ' + data.message); // Kullanıcıya backend'den gelen hata mesajını göster
+                    }
+                })
+                .catch(error => {
+                    // Ağ hatası (sunucuya ulaşılamaması) veya `.then` bloğunda fırlatılan hata durumunda
+                    if (loadingOverlay) loadingOverlay.style.display = 'none'; // Loading animasyonunu gizle
+                    console.error('İstek sırasında bir hata oluştu:', error); // Hatayı konsola yazdır
+                    alert('İstek sırasında bir hata oluştu: ' + error.message + ' Lütfen tekrar deneyin.'); // Kullanıcıya genel bir hata mesajı göster
+                });
             });
-        });
-
-        // JavaScript ile dinamik olarak bazı CSS değişkenlerini ayarlama veya başka JS fonksiyonları (varsa)
-        // Örneğin, eğer HTML'inizde il/ilçe seçimi için dinamik yükleme yapan JavaScript kodları varsa buraya ekleyin.
+        }
     </script>
 </body>
 </html>
