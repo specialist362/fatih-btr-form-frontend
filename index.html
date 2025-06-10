@@ -669,109 +669,117 @@
         </div>
     </div>
 
-    <script>
-        const loadingOverlay = document.getElementById('loadingOverlay');
-        const btrForm = document.getElementById('btrForm');
-        const successMessageDiv = document.getElementById('successMessage');
-        const applicationIdSpan = document.getElementById('applicationId');
-        const teacherDateInput = document.getElementById('teacherDate');
+   <script>
+    const loadingOverlay = document.getElementById('loadingOverlay');
+    const btrForm = document.getElementById('btrForm');
+    const successMessageDiv = document.getElementById('successMessage');
+    const applicationIdSpan = document.getElementById('applicationId');
+    const teacherDateInput = document.getElementById('teacherDate');
 
-        // Sayfa yüklendiğinde tarih alanını otomatik doldur
-        document.addEventListener('DOMContentLoaded', () => {
-            const today = new Date().toISOString().split('T')[0];
-            if (teacherDateInput) {
-                teacherDateInput.value = today;
+    // Render.com'daki backend hizmetinizin TAM URL'ini buraya yapıştırın.
+    // backend URL'nizin "https://fatih-btr-form-backend.onrender.com" olduğunu varsayıyorum.
+    // Eğer farklıysa, LÜTFEN KENDİ RENDER BACKEND URL'İNİZLE DEĞİŞTİRİN!
+    const BASE_API_URL = 'https://fatih-btr-form-backend.onrender.com';
+
+    // Sayfa yüklendiğinde tarih alanını otomatik doldur
+    document.addEventListener('DOMContentLoaded', () => {
+        const today = new Date().toISOString().split('T')[0];
+        if (teacherDateInput) {
+            teacherDateInput.value = today;
+        }
+    });
+
+    // Form gönderme işlemi
+    if (btrForm) {
+        btrForm.addEventListener('submit', async function(e) { // async keyword'ünü ekledim
+            e.preventDefault(); // Formun varsayılan gönderimini engelle
+
+            // Loading animasyonunu göster
+            if (loadingOverlay) {
+                loadingOverlay.style.display = 'flex';
             }
-        });
 
-        // Form gönderme işlemi
-        if (btrForm) {
-            btrForm.addEventListener('submit', function(e) {
-                e.preventDefault(); // Formun varsayılan gönderimini engelle
-
-                // Loading animasyonunu göster
-                if (loadingOverlay) {
-                    loadingOverlay.style.display = 'flex';
-                }
-
-                // Form verilerini al
-                const formData = {
-                    tcNo: document.getElementById('tcNo')?.value || '',
-                    fullName: document.getElementById('fullName')?.value || '',
-                    branch: document.getElementById('branch')?.value || '',
-                    email: document.getElementById('email')?.value || '',
-                    phone: document.getElementById('phone')?.value || '',
-                    weeklyHours: parseInt(document.getElementById('weeklyHours')?.value || '0'),
-                    certificateDate: document.getElementById('certificateDate')?.value || '',
-                    normStatus: document.querySelector('input[name="normStatus"]:checked')?.value || '',
-                    preferences: {
-                        currentSchool: {
-                            code: document.querySelector('input[name="currentSchoolCode"]')?.value || '',
-                            district: document.querySelector('input[name="currentSchoolDistrict"]')?.value || '',
-                            name: document.querySelector('input[name="currentSchoolName"]')?.value || ''
-                        },
-                        preference2: {
-                            code: document.querySelector('input[name="preference2Code"]')?.value || null,
-                            district: document.querySelector('input[name="preference2District"]')?.value || null,
-                            name: document.querySelector('input[name="preference2Name"]')?.value || null
-                        },
-                        preference3: {
-                            code: document.querySelector('input[name="preference3Code"]')?.value || null,
-                            district: document.querySelector('input[name="preference3District"]')?.value || null,
-                            name: document.querySelector('input[name="preference3Name"]')?.value || null
-                        },
-                        preference4: {
-                            code: document.querySelector('input[name="preference4Code"]')?.value || null,
-                            district: document.querySelector('input[name="preference4District"]')?.value || null,
-                            name: document.querySelector('input[name="preference4Name"]')?.value || null
-                        }
+            // Form verilerini al
+            const formData = {
+                tcNo: document.getElementById('tcNo')?.value || '',
+                fullName: document.getElementById('fullName')?.value || '',
+                branch: document.getElementById('branch')?.value || '',
+                email: document.getElementById('email')?.value || '',
+                phone: document.getElementById('phone')?.value || '',
+                weeklyHours: parseInt(document.getElementById('weeklyHours')?.value || '0'),
+                certificateDate: document.getElementById('certificateDate')?.value || '',
+                normStatus: document.querySelector('input[name="normStatus"]:checked')?.value || '',
+                preferences: {
+                    currentSchool: {
+                        code: document.querySelector('input[name="currentSchoolCode"]')?.value || '',
+                        district: document.querySelector('input[name="currentSchoolDistrict"]')?.value || '',
+                        name: document.querySelector('input[name="currentSchoolName"]')?.value || ''
                     },
-                    specialRequest: document.getElementById('specialRequest')?.value || '',
-                    teacherDate: document.getElementById('teacherDate')?.value || ''
-                };
+                    preference2: {
+                        code: document.querySelector('input[name="preference2Code"]')?.value || null,
+                        district: document.querySelector('input[name="preference2District"]')?.value || null,
+                        name: document.querySelector('input[name="preference2Name"]')?.value || null
+                    },
+                    preference3: {
+                        code: document.querySelector('input[name="preference3Code"]')?.value || null,
+                        district: document.querySelector('input[name="preference3District"]')?.value || null,
+                        name: document.querySelector('input[name="preference3Name"]')?.value || null
+                    },
+                    preference4: {
+                        code: document.querySelector('input[name="preference4Code"]')?.value || null,
+                        district: document.querySelector('input[name="preference4District"]')?.value || null,
+                        name: document.querySelector('input[name="preference4Name"]')?.value || null
+                    }
+                },
+                specialRequest: document.getElementById('specialRequest')?.value || '',
+                teacherDate: document.getElementById('teacherDate')?.value || ''
+            };
 
+            try {
                 // API'ye veri gönderme
-                fetch('https://fatih-btr-form-backend.onrender.com', { // <-- BURAYI KENDİ RENDER API URL'NİZLE DEĞİŞTİRİN
+                // BURASI DEĞİŞTİRİLDİ: BASE_API_URL ile backend'deki doğru endpoint'i birleştiriyoruz!
+                const response = await fetch(`${BASE_API_URL}/api/btr-applications`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify(formData)
-                })
-                .then(response => {
-                    if (loadingOverlay) {
-                        loadingOverlay.style.display = 'none'; // Yükleniyor animasyonunu gizle
-                    }
-                    if (!response.ok) {
-                        return response.json().then(errData => {
-                            throw new Error(errData.message || 'Başvuru gönderilirken bir hata oluştu.');
-                        });
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    console.log('Sunucudan gelen yanıt:', data);
-                    if (data.success) { // Backend'den success: true bekleniyor
-                        if (applicationIdSpan) applicationIdSpan.textContent = data.applicationId; // Backend'den gelen başvuru ID'sini göster
-                        if (successMessageDiv) successMessageDiv.style.display = 'block'; // Başarı mesajını görünür yap
-                        if (successMessageDiv) successMessageDiv.scrollIntoView({ behavior: 'smooth' }); // Sayfayı başarı mesajına kaydır
-                        
-                        if (btrForm) btrForm.reset(); // Formu temizle
-                        const today = new Date().toISOString().split('T')[0]; // Bugünün tarihini al
-                        if (teacherDateInput) teacherDateInput.value = today; // Tarih alanını güncelle
-                    } else {
-                        alert('Başvuru başarısız: ' + (data.message || 'Bilinmeyen bir hata oluştu.'));
-                    }
-                })
-                .catch(error => {
-                    if (loadingOverlay) {
-                        loadingOverlay.style.display = 'none'; // Hata durumunda da loading animasyonunu gizle
-                    }
-                    console.error('İstek sırasında bir hata oluştu:', error);
-                    alert('İstek sırasında bir hata oluştu: ' + error.message + ' Lütfen tekrar deneyin.');
                 });
-            });
-        }
-    </script>
-</body>
+
+                if (loadingOverlay) {
+                    loadingOverlay.style.display = 'none'; // Yükleniyor animasyonunu gizle
+                }
+
+                if (!response.ok) {
+                    // Hata durumunda, sunucudan gelen JSON hata mesajını oku
+                    const errorData = await response.json();
+                    throw new Error(errorData.message || 'Başvuru gönderilirken bir hata oluştu.');
+                }
+
+                const data = await response.json();
+                console.log('Sunucudan gelen yanıt:', data);
+
+                if (data.success) { // Backend'den success: true bekleniyor
+                    if (applicationIdSpan) applicationIdSpan.textContent = data.applicationId; // Backend'den gelen başvuru ID'sini göster
+                    if (successMessageDiv) successMessageDiv.style.display = 'block'; // Başarı mesajını görünür yap
+                    if (successMessageDiv) successMessageDiv.scrollIntoView({ behavior: 'smooth' }); // Sayfayı başarı mesajına kaydır
+
+                    if (btrForm) btrForm.reset(); // Formu temizle
+                    const today = new Date().toISOString().split('T')[0]; // Bugünün tarihini al
+                    if (teacherDateInput) teacherDateInput.value = today; // Tarih alanını güncelle
+                } else {
+                    // success: false durumunda, backend'den gelen mesajı kullan
+                    alert('Başvuru başarısız: ' + (data.message || 'Bilinmeyen bir hata oluştu.'));
+                }
+            } catch (error) {
+                if (loadingOverlay) {
+                    loadingOverlay.style.display = 'none'; // Hata durumunda da loading animasyonunu gizle
+                }
+                console.error('İstek sırasında bir hata oluştu:', error);
+                // Kullanıcıya daha anlaşılır bir hata mesajı göster
+                alert('Form gönderilirken bir sorun oluştu: ' + error.message + '\nLütfen internet bağlantınızı kontrol edip tekrar deneyin.');
+            }
+        });
+    }
+</script>
 </html>
